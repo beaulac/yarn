@@ -52,6 +52,12 @@ test.concurrent('install with resolutions on optional dependencies should not re
   });
 });
 
+test.concurrent('install with resolutions on optional subdependencies should not resolve', (): Promise<void> => {
+  return runInstall({ignoreOptional: true}, {source: 'resolutions', cwd: 'optional-subdeps'}, async config => {
+    expect(await isPackagePresent(config, 'left-pad')).toEqual(false);
+  });
+});
+
 test.concurrent('install with exotic resolutions should override versions', (): Promise<void> => {
   return runInstall({}, {source: 'resolutions', cwd: 'exotic-version'}, async config => {
     expect(await getPackageVersion(config, 'left-pad')).toEqual('1.1.1');
